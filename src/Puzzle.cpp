@@ -34,6 +34,7 @@ const std::string& Puzzle::getTitle() const { return title_; }
 const std::string& Puzzle::getDescription() const { return description_; }
 int Puzzle::getPoints() const { return points_; }
 bool Puzzle::isSolved() const { return solved_; }
+void Puzzle::setSolved(bool solved) { solved_ = solved; }
 
 bool Puzzle::submitAnswer(const std::string& answer) {
     if (solved_) {

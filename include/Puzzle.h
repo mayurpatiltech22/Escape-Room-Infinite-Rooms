@@ -23,6 +23,7 @@ public:
     const std::string& getDescription() const;
     int getPoints() const;
     bool isSolved() const;
+    void setSolved(bool solved);
 
     // Returns true for a correct answer. Solved puzzles cannot be unsolved.
     bool submitAnswer(const std::string& answer);
