@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Main game executable
 add_executable(EscapeRoom
     src/main.cpp
     src/Room.cpp
@@ -16,6 +17,21 @@ add_executable(EscapeRoom
     src/EscapeRoom.cpp
     src/RoomGraph.cpp
     src/GameManager.cpp
+    src/Puzzle.cpp
+    src/Door.cpp
 )
 
 target_include_directories(EscapeRoom PRIVATE include)
+
+# Separate puzzle-system tests
+add_executable(PuzzleTests
+    tests/puzzle_tests.cpp
+    src/Puzzle.cpp
+    src/Door.cpp
+)
+
+target_include_directories(PuzzleTests PRIVATE include)
+
+enable_testing()
+
+add_test(NAME PuzzleSystemTests COMMAND PuzzleTests)
