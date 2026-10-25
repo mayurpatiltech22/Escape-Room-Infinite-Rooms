@@ -4,11 +4,14 @@
 #include "Room.h"
 #include "RoomGraph.h"
 #include "SaveLoadManager.h"
+#include "Puzzle.h"
+#include "Door.h"
 
 #include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -21,9 +24,17 @@ private:
     int movesCount;
     vector<int> visitedRooms;
 
+    // Member 2: Puzzle system
+    unordered_map<int, unique_ptr<Puzzle>> puzzles;
+
+    // Doors indexed by their destination room ID.
+    // This assumes one controlled entrance per destination room.
+    unordered_map<int, Door> doors;
+    bool gameWon;
 public:
     GameManager();
 
+    // Existing room-management functions
     void addRoom(unique_ptr<Room> room);
     void connectRooms(int roomA, int roomB);
 
@@ -50,6 +61,14 @@ public:
     void saveGame(const string& filename) const;
     void loadGame(const string& filename);
 
+    // Member 2: Puzzle and door functions
+    void addPuzzle(unique_ptr<Puzzle> puzzle);
+    void addDoor(const Door& door);
+
+    void displayPuzzles() const;
+    void solvePuzzle(int puzzleId);
+
+    // Main game loop
     void run();
 };
 
