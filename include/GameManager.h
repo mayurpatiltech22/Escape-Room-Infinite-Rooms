@@ -3,6 +3,11 @@
 
 #include "Room.h"
 #include "RoomGraph.h"
+#include "Player.h"
+#include "Trap.h"
+#include <vector>
+
+
 
 #include <memory>
 #include <unordered_map>
@@ -14,6 +19,8 @@ private:
 unordered_map<int, unique_ptr<Room>> rooms;
 RoomGraph roomGraph;
 int currentRoomId;
+Player player;
+unordered_map<int, vector<Trap>> roomTraps;
 
 public:
 GameManager();

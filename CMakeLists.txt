@@ -19,6 +19,10 @@ add_executable(EscapeRoom
     src/GameManager.cpp
     src/Puzzle.cpp
     src/Door.cpp
+     src/Item.cpp
+    src/Inventory.cpp
+    src/Player.cpp
+    src/Trap.cpp
 )
 
 target_include_directories(EscapeRoom PRIVATE include)
@@ -28,6 +32,10 @@ add_executable(PuzzleTests
     tests/puzzle_tests.cpp
     src/Puzzle.cpp
     src/Door.cpp
+    src/Item.cpp
+    src/Inventory.cpp
+    src/Player.cpp
+    src/Trap.cpp
 )
 
 target_include_directories(PuzzleTests PRIVATE include)
