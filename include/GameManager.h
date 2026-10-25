@@ -3,6 +3,8 @@
 
 #include "Room.h"
 #include "RoomGraph.h"
+#include "Player.h"
+#include "Trap.h"
 #include "SaveLoadManager.h"
 #include "Puzzle.h"
 #include "Door.h"
@@ -27,6 +29,11 @@ int score;
 int movesCount;
 bool gameWon;
 
+// Player and traps (Member 3)
+Player player;
+unordered_map<int, vector<Trap>> roomTraps;
+
+// Visited rooms
 vector<int> visitedRooms;
 
 // Room completion tracking
@@ -68,12 +75,16 @@ void restoreState(const GameState& state);
 void saveGame(const string& filename) const;
 void loadGame(const string& filename);
 
-// Puzzle and door functions
+// Puzzle and door functions (Member 2)
 void addPuzzle(unique_ptr<Puzzle> puzzle);
 void addDoor(const Door& door);
 
 void displayPuzzles() const;
 void solvePuzzle(int puzzleId);
+
+// Player and trap functions (Member 3)
+// Add declarations here if Member 3's implementation defines
+// additional public Player or Trap management methods.
 
 // Main game loop
 void run();

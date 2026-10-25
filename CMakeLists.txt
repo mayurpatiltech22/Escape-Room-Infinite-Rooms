@@ -19,6 +19,10 @@ set(GAME_SOURCES
     src/SaveLoadManager.cpp
     src/Puzzle.cpp
     src/Door.cpp
+     src/Item.cpp
+    src/Inventory.cpp
+    src/Player.cpp
+    src/Trap.cpp
 )
 
 # 1. Main game executable
@@ -33,6 +37,10 @@ add_executable(PuzzleTests
     tests/puzzle_tests.cpp
     src/Puzzle.cpp
     src/Door.cpp
+    src/Item.cpp
+    src/Inventory.cpp
+    src/Player.cpp
+    src/Trap.cpp
 )
 target_include_directories(PuzzleTests PRIVATE include)
 

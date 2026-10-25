@@ -1,10 +1,15 @@
 #include "GameManager.h"
 #include "GameExceptions.h"
+#include "Player.h"
+#include "Trap.h"
+#include "Item.h"
 
 #include <iostream>
 #include <limits>
 #include <stdexcept>
 #include <utility>
+#include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
@@ -12,8 +17,29 @@ GameManager::GameManager()
     : currentRoomId(0),
       score(0),
       movesCount(0),
-      gameWon(false) {
+      gameWon(false),
+      player("Explorer") {
     visitedRooms.push_back(0);
+
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
+
+    roomTraps[0].emplace_back(
+        "Spike Trap",
+        "You stepped on a hidden spike trap!",
+        20
+    );
+
+    roomTraps[2].emplace_back(
+        "Poison Trap",
+        "You stepped into poisonous gas!",
+        15
+    );
+
+    roomTraps[3].emplace_back(
+        "Electric Trap",
+        "You touched a live electric wire!",
+        25
+    );
 }
 
 // ======================================================
@@ -70,6 +96,21 @@ bool GameManager::moveToRoom(int destinationRoomId) {
     visitedRooms.push_back(destinationRoomId);
 
     cout << "\nMoving to " << rooms.at(currentRoomId)->getName() << "...\n";
+
+    // Trigger traps in the room entered.
+    auto trapIt = roomTraps.find(currentRoomId);
+    if (trapIt != roomTraps.end()) {
+        for (auto& trap : trapIt->second) {
+            trap.trigger(player);
+        }
+    }
+
+    if (!player.isAlive() || player.getScore() <= 0) {
+        cout << "\n========== GAME OVER ==========\n";
+        player.displayStatus();
+        return true;
+    }
+
     displayCurrentRoom();
 
     // The game is won only after all registered puzzles are solved
