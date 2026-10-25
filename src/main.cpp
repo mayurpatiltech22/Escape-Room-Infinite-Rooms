@@ -1,7 +1,8 @@
 #include <iostream>
 #include <memory>
 #include <exception>
-
+#include "Puzzle.h"
+#include "Door.h"
 #include "GameManager.h"
 #include "EntranceRoom.h"
 #include "LibraryRoom.h"
@@ -29,8 +30,55 @@ GameManager game;
     game.connectRooms(2, 3);
     game.connectRooms(3, 4);
 
-    // Start the game
-    game.run();
+    // Register puzzles
+game.addPuzzle(
+    make_unique<MathPuzzle>(
+        101,
+        "Library Puzzle",
+        "What is 12 + 8?",
+        "20",
+        10
+    )
+);
+
+game.addPuzzle(
+    make_unique<LogicPuzzle>(
+        102,
+        "Laboratory Puzzle",
+        "What comes next: 2, 4, 8, 16, ?",
+        "32",
+        15
+    )
+);
+
+game.addPuzzle(
+    make_unique<WordPuzzle>(
+        103,
+        "Secret Archive Puzzle",
+        "What is the opposite of the word 'open'?",
+        "closed",
+        10
+    )
+);
+
+game.addPuzzle(
+    make_unique<SequencePuzzle>(
+        104,
+        "Final Escape Puzzle",
+        "What comes next: 1, 1, 2, 3, 5, ?",
+        "8",
+        20
+    )
+);
+
+// Register doors
+game.addDoor(Door(1, "Library Door", 1, 101));
+game.addDoor(Door(2, "Laboratory Door", 2, 102));
+game.addDoor(Door(3, "Secret Archive Door", 3, 103));
+game.addDoor(Door(4, "Escape Chamber Door", 4, 104));
+
+game.run();
+    
 }
 catch (const exception& error) {
     cerr << "Game error: " << error.what() << '\n';
