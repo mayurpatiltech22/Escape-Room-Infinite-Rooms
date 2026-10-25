@@ -15,6 +15,7 @@ const std::string& Door::getName() const { return name_; }
 int Door::getDestinationRoomId() const { return destinationRoomId_; }
 int Door::getRequiredPuzzleId() const { return requiredPuzzleId_; }
 bool Door::isUnlocked() const { return unlocked_; }
+void Door::setUnlocked(bool unlocked) { unlocked_ = unlocked; }
 
 bool Door::tryUnlock(const Puzzle& puzzle) {
     if (puzzle.getId() != requiredPuzzleId_ || !puzzle.isSolved()) {
