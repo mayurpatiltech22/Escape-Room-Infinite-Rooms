@@ -21,6 +21,7 @@ public:
     int getDestinationRoomId() const;
     int getRequiredPuzzleId() const;
     bool isUnlocked() const;
+    void setUnlocked(bool unlocked);
 
     bool tryUnlock(const Puzzle& puzzle);
     bool open() const;
