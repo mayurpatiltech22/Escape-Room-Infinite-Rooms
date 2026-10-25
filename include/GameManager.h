@@ -37,12 +37,10 @@ unordered_map<int, unique_ptr<Puzzle>> puzzles;
 
 // Doors indexed by destination room ID
 unordered_map<int, Door> doors;
-```
 
 public:
 GameManager();
 
-```
 // Room management
 void addRoom(unique_ptr<Room> room);
 void connectRooms(int roomA, int roomB);
