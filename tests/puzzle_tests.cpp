@@ -23,6 +23,26 @@ int main() {
     assert(door.tryUnlock(math));
     assert(door.open());
 
+    // Test hint system
+    MathPuzzle puzzleWithHints(3, "Hint Test", "Test puzzle with hints", "42", 15);
+    puzzleWithHints.addHint("Think about the meaning of life");
+    puzzleWithHints.addHint("It's a famous number from pop culture");
+    assert(puzzleWithHints.hasMoreHints());
+    std::string hint1 = puzzleWithHints.getNextHint();
+    assert(!hint1.empty());
+    assert(puzzleWithHints.getHintsRevealed() == 1);
+
+    // Test attempts tracking
+    assert(puzzleWithHints.getAttempts() == 0);
+    puzzleWithHints.submitAnswer("wrong");
+    assert(puzzleWithHints.getAttempts() == 1);
+    assert(!puzzleWithHints.isSolved());
+
+    // Test new puzzle types
+    CipherPuzzle cipher(4, "Cipher", "Decrypt: KHOOR", "KHOOR", 3, "HELLO", 20);
+    assert(cipher.submitAnswer("HELLO"));
+    assert(cipher.isSolved());
+
     std::cout << "All puzzle and door tests passed.\n";
     return 0;
 }

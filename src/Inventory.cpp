@@ -70,3 +70,7 @@ void Inventory::displayInventory() const {
 int Inventory::getItemCount() const {
     return static_cast<int>(items_.size());
 }
+
+const std::vector<std::shared_ptr<Item>>& Inventory::getItems() const {
+    return items_;
+}

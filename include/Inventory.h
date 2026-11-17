@@ -17,6 +17,7 @@ public:
     bool hasItem(const std::string& itemName) const;
     void displayInventory() const;
     int getItemCount() const;
+    const std::vector<std::shared_ptr<Item>>& getItems() const;
 };
 
 #endif

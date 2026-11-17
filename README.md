@@ -1,12 +1,13 @@
 # Escape Room: Infinite Rooms
 
-An Object-Oriented C++ text adventure and puzzle game featuring procedural room graphs, interactive puzzles, unlockable doors, and an enterprise-grade **Save/Load System** with comprehensive **File-Handling** and **Exception-Handling** test suites.
+An Object-Oriented C++ 2D graphical adventure and puzzle game featuring real-time room exploration, procedural rendering, interactive puzzles, unlockable doors, audio synthesis, and an enterprise-grade **Save/Load System** with comprehensive **File-Handling** and **Exception-Handling** test suites.
 
 ---
 
 ## Table of Contents
 - [Project Overview](#project-overview)
 - [Key Features](#key-features)
+- [Graphics & Real-Time Game Engine](#graphics--real-time-game-engine)
 - [Architecture & Class Hierarchy](#architecture--class-hierarchy)
 - [Save/Load System & File Handling](#saveload-system--file-handling)
 - [Exception-Handling Strategy](#exception-handling-strategy)
@@ -19,23 +20,83 @@ An Object-Oriented C++ text adventure and puzzle game featuring procedural room 
 
 ## Project Overview
 
-*Escape Room: Infinite Rooms* challenges players to navigate through connected chambers, solve diverse puzzles (math, logic, word, sequence), unlock doors, and escape the facility. The engine leverages modern C++ principles (C++17) emphasizing dynamic polymorphism, encapsulation, exception safety, and persistent state management.
+*Escape Room: Infinite Rooms* challenges players to explore interconnected chambers in a top-down 2D real-time graphical environment, solve diverse puzzles (math, logic, word, sequence), unlock doors, avoid hazardous traps, collect inventory items, and escape the facility. The engine leverages modern C++ principles (C++17) emphasizing dynamic polymorphism, encapsulation, exception safety, procedural rendering, and persistent state management.
 
 ---
 
 ## Key Features
 
-- **Polymorphic Rooms**: Abstract `Room` base class with concrete chambers (`EntranceRoom`, `LibraryRoom`, `LabRoom`, `SecretRoom`, `EscapeRoom`).
-- **Graph-Based Navigation**: `RoomGraph` utilizing Breadth-First Search (BFS) to compute shortest escape routes.
-- **Puzzle & Door Mechanics**: Multi-type puzzle engine (`MathPuzzle`, `LogicPuzzle`, `WordPuzzle`, `SequencePuzzle`) tied to unlockable security doors.
+- **2D Real-Time Graphical Exploration**: Full 60 FPS top-down graphical engine using modern SFML 3 with smooth WASD/Arrow key movement, dynamic player lighting, flashlight beam, and collision detection.
+- **Thematic Procedural Room Rendering**: Dynamic floor tiling, wall sconces with flickering torches, ambient particle motes (Library dust, Lab toxic bubbles, Archive arcane sparks, and Escape sparkles).
+- **Interactive In-World Entities**:
+  - **Animated Sliding Doors**: Featuring red/green lock status beacons and destination tags.
+  - **Puzzle Pedestals**: Pulsing holographic terminals allowing in-game interaction.
+  - **Hazard Traps**: Spike traps, poison vents, and electric coils with real-time evasion checks and damage animations.
+  - **Collectible Items**: Health potions, first-aid medkits, and keycards with inventory storage and usage.
+- **Diagnostic HUD & BFS Mini-Map**:
+  - Live animated health bar with status indicators (`[Excellent]`, `[Good]`, `[Critical]`).
+  - Score badge and moves counter.
+  - Mini-map rendering the `RoomGraph` with real-time **BFS shortest escape route** glowing overlay.
+  - Interactive inventory bag with 1-click / hotkey item usage (`[1]`, `[2]`, `[3]`, `[4]`).
+  - Real-time scrolling mission activity feed.
+- **Interactive Cyber Puzzle Terminal**: In-game modal dialog with keyboard text input, backspace support, blinking cursor, and instant answer verification.
+- **Procedural Audio Synthesizer**: 11 procedural sound effects (footsteps, pickups, door unlocks, buzzer alarms, healing, victory fanfare) generated without external audio files.
+- **Polymorphic Rooms & Puzzles**: Abstract base classes (`Room`, `Puzzle`) with concrete specializations.
 - **Robust Save & Load System**:
-  - Full game snapshot capture and restoration.
+  - Full game snapshot capture and restoration with quicksave (`[F5]`) and quickload (`[F9]`).
   - Checksum validation for tamper and corruption detection.
-  - Support for custom filenames and multiple save slots (`quicksave.sav`, `slot1.sav`, etc.).
-- **Strong Exception Safety**:
-  - Comprehensive custom exception hierarchy (`SaveFileNotFoundException`, `CorruptSaveException`, `SaveVersionMismatchException`, `FileWriteException`, `InvalidGameStateDataException`).
-  - Active game state rollback / preservation if a load fails halfway.
-- **Extensive Test Coverage**: Automated test suites for file handling, exception handling, and puzzles.
+  - Multiple save slots support (`quicksave.sav`, `slot1.sav`, etc.).
+- **Dual Mode Support**: Launches in high-fidelity graphical mode by default, with `--cli` flag support for text-mode terminals.
+- **Strong Exception Safety & Automated Test Suites**: Comprehensive test runners for file handling, exception handling, and puzzles.
+
+---
+
+## Graphics & Real-Time Game Engine
+
+The game engine utilizes **SFML 3 (Simple and Fast Multimedia Library)** to deliver a responsive, realistic top-down 2D exploratory experience:
+
+```
++---------------------------------------------------------------------------------+
+|                                  GameRenderer                                   |
+|   +-----------------------+   +-----------------------+   +-----------------+   |
+|   |      RoomVisuals      |   |     PlayerEntity      |   |       HUD       |   |
+|   |  - Procedural floors  |   |  - WASD / Arrow keys  |   |  - HP Bar       |   |
+|   |  - Wall torches & glow|   |  - Flashlight cone    |   |  - Score/Moves  |   |
+|   |  - Ambient particles  |   |  - Walking cycle bob  |   |  - BFS Mini-map |   |
+|   |  - Thematic props     |   |  - Proximity prompts  |   |  - Item slots   |   |
+|   +-----------+-----------+   +-----------+-----------+   +--------+--------+   |
+|               |                           |                        |            |
+|   +-----------v---------------------------v------------------------v--------+   |
+|   |                       InteractiveEntity (Polymorphic)                   |   |
+|   |   +-------------------+  +-------------------+  +-------------------+   |   |
+|   |   |    DoorEntity     |  | PuzzlePedestalEnt |  |   TrapZoneEntity  |   |   |
+|   |   | - Sliding panels  |  | - Hologram aura   |  | - Hazard grates   |   |   |
+|   |   | - Lock indicators |  | - Solve status    |  | - Damage popup    |   |   |
+|   |   +-------------------+  +-------------------+  +-------------------+   |   |
+|   +-------------------------------------------------------------------------+   |
+|                                                                                 |
+|   +-----------------------+   +-----------------------+   +-----------------+   |
+|   |      PuzzleModal      |   |      GameDialog       |   |   SoundSystem   |   |
+|   |  - Blinking cursor    |   |  - Pause / Menu       |   |  - 11 procedural|   |
+|   |  - Real-time typing   |   |  - QuickSave/Load     |   |    synthesized  |   |
+|   |  - Instant feedback   |   |  - Victory celebration|   |    waveforms    |   |
+|   +-----------------------+   +-----------------------+   +-----------------+   |
++---------------------------------------------------------------------------------+
+```
+
+### Controls & Keybindings
+| Key | Action |
+| :--- | :--- |
+| `[W]` / `[Up]` | Move North |
+| `[S]` / `[Down]` | Move South |
+| `[A]` / `[Left]` | Move West |
+| `[D]` / `[Right]` | Move East |
+| `[E]` | Interact (Traverse Doors, Inspect Puzzle Pedestals, Pick Up Items) |
+| `[1]` - `[4]` | Use Satchel Inventory Item (e.g. Health Potion, Medkit) |
+| `[M]` | Toggle Graph Mini-Map BFS Shortest Route Highlighting |
+| `[F5]` | Quick Save active game state to `quicksave.sav` |
+| `[F9]` | Quick Load game state from `quicksave.sav` |
+| `[P]` / `[ESC]` | Pause Menu & Settings (Save, Load, Mute Audio, Quit) |
 
 ---
 
@@ -177,8 +238,11 @@ cmake --build build
 # 3. Run all unit test suites
 ctest --test-dir build --output-on-failure
 
-# 4. Launch main game
+# 4. Launch 2D Graphical Game (Default)
 ./build/EscapeRoom
+
+# 5. Launch CLI Text Mode (Optional)
+./build/EscapeRoom --cli
 ```
 
 ### Option B: Direct Compilation with G++ / MinGW

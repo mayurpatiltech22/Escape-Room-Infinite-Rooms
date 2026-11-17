@@ -1,5 +1,34 @@
+# Build directories
 build/
-*.exe
+build-*/
 *.o
+*.obj
+*.exe
+*.dll
+*.a
+*.lib
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.ninja
+build.ninja
+.ninja_deps
+.ninja_log
+
+# Save files
+*.sav
+saves/
+
+# IDE
 .vscode/
-build-mingw/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db

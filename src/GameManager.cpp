@@ -4,6 +4,7 @@
 #include "Trap.h"
 #include "Item.h"
 
+#include <cctype>
 #include <iostream>
 #include <limits>
 #include <stdexcept>
@@ -357,41 +358,75 @@ void GameManager::solvePuzzle(int puzzleId) {
 
     cout << "\n========== SOLVE PUZZLE ==========\n";
     puzzle.display();
-    cout << "Enter your answer: ";
 
-    string answer;
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    if (!getline(cin, answer)) {
-        if (cin.eof()) {
-            cout << "\nInput ended.\n";
-        } else {
-            cin.clear();
-            cout << "Could not read the answer.\n";
+    // Hint system loop
+    while (true) {
+        cout << "\nChoose an action:\n";
+        cout << "1. Submit answer\n";
+        if (puzzle.hasMoreHints()) {
+            cout << "2. Get hint (" << puzzle.getHintsRevealed() + 1 << "/" << puzzle.getTotalHints() << ")\n";
         }
-        return;
-    }
+        cout << "Q. Cancel\n";
+        cout << "Choice: ";
 
-    if (!puzzle.submitAnswer(answer)) {
-        cout << "\nIncorrect answer! Try again later.\n";
-        return;
-    }
+        char choice;
+        cin >> choice;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-    score += puzzle.getPoints();
-    cout << "\nCorrect answer!\n";
-    cout << "You earned " << puzzle.getPoints() << " points.\n";
-    cout << "Total score: " << score << '\n';
-
-    bool unlockedDoor = false;
-    for (auto& entry : doors) {
-        Door& door = entry.second;
-        if (door.getRequiredPuzzleId() == puzzleId && door.tryUnlock(puzzle)) {
-            cout << "Door unlocked: " << door.getName() << '\n';
-            unlockedDoor = true;
+        if (tolower(choice) == 'q') {
+            cout << "Puzzle solving cancelled.\n";
+            return;
         }
-    }
 
-    if (!unlockedDoor) {
-        cout << "Puzzle solved, but no registered door requires it.\n";
+        if (choice == '1') {
+            cout << "Enter your answer: ";
+            string answer;
+            if (!getline(cin, answer)) {
+                if (cin.eof()) {
+                    cout << "\nInput ended.\n";
+                } else {
+                    cin.clear();
+                    cout << "Could not read the answer.\n";
+                }
+                return;
+            }
+
+            if (!puzzle.submitAnswer(answer)) {
+                cout << "\nIncorrect answer!\n";
+                if (puzzle.getMaxAttempts() > 0) {
+                    cout << "Attempts remaining: " << (puzzle.getMaxAttempts() - puzzle.getAttempts()) << "\n";
+                }
+                if (puzzle.getAttempts() >= puzzle.getMaxAttempts() && puzzle.getMaxAttempts() > 0) {
+                    cout << "You have used all your attempts. Try again later.\n";
+                    return;
+                }
+                continue;
+            }
+
+            score += puzzle.getPoints();
+            cout << "\nCorrect answer!\n";
+            cout << "You earned " << puzzle.getPoints() << " points.\n";
+            cout << "Total score: " << score << '\n';
+
+            bool unlockedDoor = false;
+            for (auto& entry : doors) {
+                Door& door = entry.second;
+                if (door.getRequiredPuzzleId() == puzzleId && door.tryUnlock(puzzle)) {
+                    cout << "Door unlocked: " << door.getName() << '\n';
+                    unlockedDoor = true;
+                }
+            }
+
+            if (!unlockedDoor) {
+                cout << "Puzzle solved, but no registered door requires it.\n";
+            }
+            return;
+        }
+
+        if (choice == '2' && puzzle.hasMoreHints()) {
+            string hint = puzzle.getNextHint();
+            cout << "\nHINT: " << hint << "\n";
+        }
     }
 
     // If the player is already in the Escape Chamber, check victory now.
@@ -569,4 +604,28 @@ void GameManager::run() {
                 cout << "Invalid choice. Please choose 1 to 10.\n";
         }
     }
+}
+
+Player& GameManager::getPlayer() {
+    return player;
+}
+
+const Player& GameManager::getPlayer() const {
+    return player;
+}
+
+bool GameManager::isGameWon() const {
+    return gameWon;
+}
+
+const unordered_map<int, unique_ptr<Puzzle>>& GameManager::getPuzzles() const {
+    return puzzles;
+}
+
+const unordered_map<int, Door>& GameManager::getDoors() const {
+    return doors;
+}
+
+unordered_map<int, Door>& GameManager::getDoors() {
+    return doors;
 }

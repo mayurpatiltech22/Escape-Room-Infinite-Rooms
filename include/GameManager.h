@@ -22,7 +22,7 @@ private:
 unordered_map<int, unique_ptr<Room>> rooms;
 RoomGraph roomGraph;
 
-```
+
 // Game state
 int currentRoomId;
 int score;
@@ -83,12 +83,15 @@ void displayPuzzles() const;
 void solvePuzzle(int puzzleId);
 
 // Player and trap functions (Member 3)
-// Add declarations here if Member 3's implementation defines
-// additional public Player or Trap management methods.
+Player& getPlayer();
+const Player& getPlayer() const;
+bool isGameWon() const;
+const unordered_map<int, unique_ptr<Puzzle>>& getPuzzles() const;
+const unordered_map<int, Door>& getDoors() const;
+unordered_map<int, Door>& getDoors();
 
 // Main game loop
 void run();
-```
 
 };
 
