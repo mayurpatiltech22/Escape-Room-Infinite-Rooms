@@ -22,7 +22,6 @@ private:
 unordered_map<int, unique_ptr<Room>> rooms;
 RoomGraph roomGraph;
 
-
 // Game state
 int currentRoomId;
 int score;
