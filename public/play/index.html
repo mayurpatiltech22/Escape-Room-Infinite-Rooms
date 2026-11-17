@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Play · Escape Room: Infinite Rooms</title>
+  <meta name="description" content="Play Escape Room: Infinite Rooms in your browser. Explore five chambers, solve puzzles, dodge traps and escape." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23100c08'/><rect x='9' y='6' width='14' height='22' rx='1' fill='none' stroke='%23e8b54a' stroke-width='2.5'/><circle cx='19' cy='17' r='1.8' fill='%23e8b54a'/></svg>" />
+  <link rel="stylesheet" href="game.css" />
+</head>
+<body>
+  <div id="stage">
+    <canvas id="game" width="1200" height="800" aria-label="Escape Room game view"></canvas>
+
+    <!-- Title / dialogs -->
+    <div id="overlay" class="overlay" role="dialog" aria-modal="true">
+      <div class="panel" id="panel"></div>
+    </div>
+
+    <!-- Puzzle terminal -->
+    <div id="puzzle" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="pz-title">
+      <form class="terminal" id="pz-form" autocomplete="off">
+        <div class="term-head">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="term-id" id="pz-id">TERMINAL</span>
+        </div>
+        <p class="term-kind" id="pz-kind">Puzzle</p>
+        <h2 id="pz-title">Puzzle</h2>
+        <p class="term-q" id="pz-q"></p>
+        <div class="term-meta"><span id="pz-reward"></span><span id="pz-attempts"></span></div>
+        <label class="term-input">
+          <span>&gt;</span>
+          <input id="pz-input" type="text" spellcheck="false" autocapitalize="off" aria-label="Your answer" maxlength="40" />
+        </label>
+        <p class="term-status" id="pz-status" aria-live="polite"></p>
+        <div class="term-actions">
+          <button type="button" class="btn ghost" id="pz-close">Close <kbd>Esc</kbd></button>
+          <button type="submit" class="btn" id="pz-submit">Submit <kbd>Enter</kbd></button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Touch controls -->
+  <div id="touch" aria-hidden="true">
+    <div class="dpad">
+      <button data-dir="up">▲</button>
+      <button data-dir="left">◀</button>
+      <button data-dir="right">▶</button>
+      <button data-dir="down">▼</button>
+    </div>
+    <div class="touch-actions">
+      <button id="t-menu" class="small">II</button>
+      <button id="t-act">E</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
